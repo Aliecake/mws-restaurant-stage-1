@@ -107,29 +107,3 @@ self.addEventListener('fetch', (event) => {
 		})
 	);
 });
-		/*	else {
-			//if request is not in cache, add it
-				return fetch(request).then((response) => {
-					let toCache = response.clone();
-					caches.open(projectCache).then((cache) => {
-						cache.put(request, toCache).catch((err) => {
-							console.warn(request.url + err);
-						});
-					});
-					return response;
-				});
-			}
-		})
-	);
-});
-
-	if (caches.match(request, {ignoreSearch: true})) {
-		event.respondWith(fetch(request));
-		return;
-	}
-	if (request.url.includes('/restaurants/') || request.url.includes('/reviews/')) {
-		event.respondWith(fetch(request, {cache: 'no-store'}));
-		return;
-	}
-}
-*/
