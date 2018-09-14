@@ -9,14 +9,18 @@ const port = 1337;
 class DBHelper {
 	//create and open a Database
 	static openDB() {
+		//make cases for updates
 		if (!navigator.serviceWorker) {
 			return Promise.resolve();
 		}
-		return idb.open('restaurantR', 1, function(upgradeDb) {
-			var store = upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
-			store.createIndex('by-id', 'id');
-			store.createIndex('by-neighborhood', 'neighborhood');
-			store.createIndex('by-cuisine', 'cuisine_type');
+		return idb.open('restIDB', 1, (upgradeDb) => {
+			switch(upgradeDb.oldVersion) {
+			case 0:
+				upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
+			case 1:
+				const reviewsIDB = upgradeDb.createObjectStore('reviews', {autoIncrement: true, keyPath: 'id'});
+				reviewsIDB.createIndex('ID', 'restaurant_id');
+			}
 		});
 	}
 	/**
@@ -27,46 +31,28 @@ class DBHelper {
 		return `http://localhost:${port}/restaurants`;
 	}
 	static get REVIEW_URL() {
-		return `http://localhost:${port}/restaurants/reviews/`;
+		//to store only each restaurant id when visited, instead of trying to store full db on first load
+		var windowPath = window.location.href;
+		var rID = windowPath.split('?id=').pop();
+		return `http://localhost:${port}/reviews/?restaurant_id=${rID}`;
 	}
-
 	/**
-	 * Fetch all restaurants. Now populates with either legacy XHR or fetch
+	 * Fetch all restaurants.
 	 */
 
 	static fetchRestaurants(callback) {
 		let dbPromise = DBHelper.openDB();
-		//fetch restaurants from IDB even when offline
+		//fetch restaurants from IDB even when offline. Opens DB and gets all restaurants
 		dbPromise.then(db => {
 			var tx = db.transaction('restaurants', 'readonly');
 			var store = tx.objectStore('restaurants');
 			return store.getAll();
 		})
 			.then(response => {
-				console.log('TAKEN out of IDBiatch', response);
 				return response;
 			}).then(data => callback(null, data))
-			.catch(error => callback(`fetch request failed ${error.statusText}`, null));
+			.catch(error => callback(`fetch request of restaurants failed ${error.statusText}`, null));
 	}
-
-	/* old XHR
-		let xhr = new XMLHttpRequest();
-		xhr.open('GET', DBHelper.DATABASE_URL);
-		xhr.onload = () => {
-			if (xhr.status === 200) { // Got a success response from server!
-				const json = JSON.parse(xhr.responseText);
-				const restaurants = json;//changed json.restaurants so XHR would work
-				console.log(json);
-				callback(null, restaurants);
-			} else { // Oops!. Got an error from server.
-				const error = (`Request failed. Returned status of ${xhr.status}`);
-				callback(error, null);
-			}
-		};
-		xhr.send();
-	}
-*/
-
 	/**
 	 * Fetch a restaurant by its ID.
 	 */
@@ -174,7 +160,19 @@ class DBHelper {
 			}
 		});
 	}
-
+	static fetchReviews() {
+		let dbPromise = DBHelper.openDB();
+		dbPromise.then(db => {
+			//opens DB and gets reviews for restaurants visited.
+			var tx = db.transaction('reviews', 'readonly');
+			var store = tx.objectStore('reviews');
+			return store.getAll();
+		})
+			.then(response => {
+				//calls restaurant_info.js fillreviews so transaction stays open. Returning response ends async request.
+				fillReviewsHTML(response);
+			});
+	}
 	/**
 	 * Restaurant page URL.
 	 */
@@ -191,7 +189,7 @@ class DBHelper {
 		if (restaurant.photograph) {
 			return (`/img/${restaurant.photograph}`);
 		} else {
-			return (`/img/${restaurant.id}.jpg`);
+			return (`/img/${restaurant.id}.jpg`); //fixes incomplete data in rest server for Restaurant 10
 		}
 	}
 
