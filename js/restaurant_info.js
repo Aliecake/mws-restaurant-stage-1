@@ -1,6 +1,5 @@
 let restaurant;
 var newMap;
-
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -84,8 +83,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	if (restaurant.operating_hours) {
 		fillRestaurantHoursHTML();
 	}
-	// fill reviews
-	fillReviewsHTML();
+	// fill reviews without closing transaction
+	DBHelper.fetchReviews(restaurant.id, fillReviewsHTML);
 };
 
 /**
@@ -111,6 +110,8 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
 	* Create all reviews HTML and add them to the webpage.
 	*/
+
+
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 	const container = document.getElementById('reviews-container');
 	const title = document.createElement('h2');
@@ -135,6 +136,8 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 	* Added class to style reviews
 	*/
 createReviewHTML = (review) => {
+	let newDate = new Date(review.updatedAt * 1).toDateString();//converts epoch to a date and returns only month/day/year
+
 	const li = document.createElement('li');
 	const name = document.createElement('p');
 	name.className = 'name';
@@ -143,7 +146,7 @@ createReviewHTML = (review) => {
 
 	const date = document.createElement('p');
 	date.className = 'date';
-	date.innerHTML = review.date;
+	date.innerHTML = newDate;
 	li.appendChild(date);
 
 	const rating = document.createElement('p');
@@ -162,7 +165,7 @@ createReviewHTML = (review) => {
 /**
 	* Add restaurant name to the breadcrumb navigation menu
 	*/
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
 	const breadcrumb = document.getElementById('breadcrumb');
 	const li = document.createElement('li');
 	li.innerHTML = restaurant.name;
