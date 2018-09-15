@@ -147,6 +147,15 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
 	const li = document.createElement('li');
 
+	//create Fave button
+	const faveButton = document.createElement('button');
+	const i = document.createElement('i');
+	faveButton.className = 'button favorite-button';
+	i.className = 'fa fa-heart';
+	//append button
+	li.append(faveButton);
+	faveButton.appendChild(i);
+
 	const picture = document.createElement('picture');
 	const image = document.createElement('img');
 	const source1 = document.createElement('source');
@@ -183,7 +192,7 @@ createRestaurantHTML = (restaurant) => {
 	const more = document.createElement('button');
 	more.innerHTML = 'View Details';
 	// Thank you to Doug Brown for idea to turn a link into button for accessibility https://youtu.be/92dtrNU1GQc - added class & id
-	more.className = 'button';
+	more.className = 'button detail-button';
 	more.onclick = (() => {
 		const url = DBHelper.urlForRestaurant(restaurant);
 		window.location.href = url;

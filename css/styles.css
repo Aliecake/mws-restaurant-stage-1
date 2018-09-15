@@ -92,6 +92,46 @@ section {
 #maincontent {
 	background-color: #fff;
 }
+/* ===Favorite button===*/
+.favorite-button {
+    background-color: transparent;
+    position: relative;
+    text-align: center;
+    color: rgba(78, 78, 78);
+	transition: all ease 0.4s;
+	border: none;
+	outline: none;
+}
+.favorite-button .fa {
+    transition: all ease 0.4s;
+}
+.favorite-button:focus .fa {
+	color: rgb(78, 78, 78);
+}
+.favorite-button:hover {
+	background-color: transparent;
+}
+.favorite-button:hover .fa {
+	color: rgb(212, 63, 63);
+}
+.favorited {
+	background-color: rgb(212, 63, 63);
+}
+.favorited .fa {
+	color: white;
+}
+.favorited:focus {
+	background-color: rgb(212, 63, 63);
+}
+.favorited:focus .fa {
+	color: white;
+}
+.favorited:hover {
+    background-color: rgb(212, 63, 63);
+}
+.favorited:hover .fa{
+	color: white;
+}
 
 #footer {
 	background-color: #333;
@@ -185,7 +225,6 @@ nav h2 a {
 
 #restaurants-list li {
 	background-color: #fff;
-	border: 2px solid rgb(230, 224, 230);
 	box-shadow: 2px 2px 20px #333;
 	border-radius: 0 0 15px 0;
 	font-family: Arial,sans-serif;
@@ -214,7 +253,7 @@ nav h2 a {
 	margin: 0;
 }
 
-#restaurants-list li button {
+#restaurants-list li .detail-button {
 	background-color: #333;
 	border-bottom: 3px solid #eee;
 	color: #fff;
