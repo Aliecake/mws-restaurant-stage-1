@@ -64,6 +64,15 @@ fetchRestaurantFromURL = (callback) => {
 	*set alt tags for images.
 	*/
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+	const restContainer = document.getElementById('restaurant-container');
+	const faveButton = document.createElement('button');
+	const i = document.createElement('i');
+	faveButton.className = 'button favorite-button';
+	i.className = 'fa fa-heart';
+	restContainer.append(faveButton);
+	faveButton.append(i);
+	//append button
+
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
 
