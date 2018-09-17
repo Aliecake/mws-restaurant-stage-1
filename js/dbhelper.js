@@ -181,7 +181,7 @@ class DBHelper {
 		fetch(faveURL, {method: 'PUT'}).then(response => {
 			console.log(response);
 			//open favorites and change to true/false based
-		}).then(() => console.log('done'));
+		});
 	}
 	/**
 	 * Restaurant page URL.
