@@ -8,7 +8,7 @@ function storeRestaurants() {
 			return response.json();
 		}).then (restaurants => {
 			//open transaction to write in restaurants
-			dbPromise.then(function (db) {
+			dbPromise.then(db => {
 				if (!db) return;
 				let tx = db.transaction('restaurants', 'readwrite');
 				let store = tx.objectStore('restaurants');
@@ -31,7 +31,7 @@ function storeReviews() {
 			//place json
 		}).then (reviews => {
 			//take reviews, use database transaction to write reviews in db
-			dbPromise.then(function (db) {
+			dbPromise.then(db => {
 				if (!db) return;
 				let tx = db.transaction('reviews', 'readwrite');
 				let store = tx.objectStore('reviews');
@@ -44,7 +44,6 @@ function storeReviews() {
 			});
 		});
 }
-
 //steps in order
 DBHelper.openDB()
 	.then(storeRestaurants())
