@@ -96,11 +96,11 @@ section {
 .favorite-button {
     background-color: transparent;
     position: relative;
-    text-align: center;
     color: rgba(78, 78, 78);
 	transition: all ease 0.4s;
-	border: none;
+	border: 2px;
 	outline: none;
+	font-size: 2rem;
 }
 .favorite-button .fa {
     transition: all ease 0.4s;
@@ -111,26 +111,11 @@ section {
 .favorite-button:hover {
 	background-color: transparent;
 }
-.favorite-button:hover .fa {
-	color: rgb(212, 63, 63);
-}
 .favorited {
-	background-color: rgb(212, 63, 63);
-}
-.favorited .fa {
-	color: white;
-}
-.favorited:focus {
-	background-color: rgb(212, 63, 63);
-}
-.favorited:focus .fa {
-	color: white;
-}
-.favorited:hover {
-    background-color: rgb(212, 63, 63);
+	color: rgb(255, 0, 0);
 }
 .favorited:hover .fa{
-	color: white;
+	color: rgb(255, 0, 0);
 }
 
 #footer {
