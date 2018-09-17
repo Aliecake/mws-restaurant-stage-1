@@ -73,10 +73,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
 	const image = document.getElementById('restaurant-img');
 	image.className = 'restaurant-img';
-	image.src = DBHelper.imageUrlForRestaurant(restaurant) + '_large.jpg';
+	image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg', '') + '_large.jpg';
 	image.alt = `Picture of ${restaurant.name} restaurant`;
 	//create fave button
 	const faveButton = document.createElement('button');
+
 	const i = document.createElement('i');
 	getClass = () => {
 		if(restaurant.is_favorite == 'true') {
