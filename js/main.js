@@ -146,36 +146,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
 	const li = document.createElement('li');
-	//create Fave button
-	const faveButton = document.createElement('button');
-	const i = document.createElement('i');
-	getClass = () => {
-		if(restaurant.is_favorite == 'true') {
-			return 'button favorite-button favorited';
-		}
-		else {
-			return 'button favorite-button';
-		}
-	};
-	faveButton.setAttribute('class', getClass());
-	faveButton.setAttribute('tabindex', '0');
-	faveButton.setAttribute('onClick', 'favorite()');
-	i.className = 'fa fa-heart';
-	favorite = () => {
-		faveButton.classList.toggle('favorited');
-		let id = restaurant.id;
-		if (faveButton.className === 'button favorite-button favorited') {
-			let truthy = true;
-			return DBHelper.isFavorite(truthy, id);
-		}
-		else {
-			let truthy = false;
-			return DBHelper.isFavorite(truthy, id);
-		}
-	};
-	//append button
-	li.append(faveButton);
-	faveButton.appendChild(i);
 
 	const picture = document.createElement('picture');
 	const image = document.createElement('img');
@@ -219,7 +189,6 @@ createRestaurantHTML = (restaurant) => {
 		window.location.href = url;
 	});
 	li.append(more);
-
 	return li;
 };
 
