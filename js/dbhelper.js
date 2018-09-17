@@ -4,8 +4,6 @@
  */
 
 // Change this to your server port
-const port = 1337;
-
 class DBHelper {
 	//create and open a Database
 	static openDB() {
@@ -16,7 +14,7 @@ class DBHelper {
 		return idb.open('restIDB', 1, (upgradeDb) => {
 			switch(upgradeDb.oldVersion) {
 			case 0:
-				upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
+				upgradeDb.createObjectStore('restaurants', {keyPath: 'id'}); //autoincrement will add duplicates to DB on put
 			case 1:
 				const reviewsIDB = upgradeDb.createObjectStore('reviews', {autoIncrement: true, keyPath: 'id'});
 				reviewsIDB.createIndex('ID', 'restaurant_id');
@@ -27,13 +25,16 @@ class DBHelper {
 	 * Database URL.
 	 *
 	 */
+
 	static get DATABASE_URL() {
+		const port = 1337;
 		return `http://localhost:${port}/restaurants`;
 	}
 	static get REVIEW_URL() {
+		const port = 1337;
 		//to store only each restaurant id when visited, instead of trying to store full db on first load
-		var windowPath = window.location.href;
-		var rID = windowPath.split('?id=').pop();
+		let windowPath = window.location.href;
+		let rID = windowPath.split('?id=').pop();
 		return `http://localhost:${port}/reviews/?restaurant_id=${rID}`;
 	}
 	/**
@@ -172,6 +173,15 @@ class DBHelper {
 				//calls restaurant_info.js fillreviews so transaction stays open. Returning response ends async request.
 				fillReviewsHTML(response);
 			});
+	}
+
+	//store favorite value in idb, takes values from fillrestaurantshtml onclick
+	static isFavorite(truthy, id) {
+		const faveURL = `http://localhost:1337/restaurants/${id}/?is_favorite=${truthy}`;
+		fetch(faveURL, {method: 'PUT'}).then(response => {
+			console.log(response);
+			//open favorites and change to true/false based
+		}).then(() => console.log('done'));
 	}
 	/**
 	 * Restaurant page URL.
