@@ -94,11 +94,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		let id = restaurant.id;
 		if (faveButton.className === 'button favorite-button favorited') {
 			let truthy = true;
-			return DBHelper.isFavorite(truthy, id);
+			return DBHelper.setFavorite(truthy, id);
 		}
 		else {
 			let truthy = false;
-			return DBHelper.isFavorite(truthy, id);
+			return DBHelper.setFavorite(truthy, id);
 		}
 	};
 	restContainer.append(faveButton);
