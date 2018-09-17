@@ -58,21 +58,13 @@ fetchRestaurantFromURL = (callback) => {
 		});
 	}
 };
-
 /**
 	* Create restaurant HTML and add it to the webpage
 	*set alt tags for images.
 	*/
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+	//create fave button
 	const restContainer = document.getElementById('restaurant-container');
-	const faveButton = document.createElement('button');
-	const i = document.createElement('i');
-	faveButton.className = 'button favorite-button';
-	i.className = 'fa fa-heart';
-	restContainer.append(faveButton);
-	faveButton.append(i);
-	//append button
-
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
 
@@ -83,6 +75,34 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	image.className = 'restaurant-img';
 	image.src = DBHelper.imageUrlForRestaurant(restaurant) + '_large.jpg';
 	image.alt = `Picture of ${restaurant.name} restaurant`;
+	const faveButton = document.createElement('button');
+	const i = document.createElement('i');
+	getClass = () => {
+		if(restaurant.is_favorite == 'true') {
+			return 'button favorite-button favorited';
+		}
+		else {
+			return 'button favorite-button';
+		}
+	};
+	faveButton.setAttribute('class', getClass());
+	faveButton.setAttribute('tabindex', '0');
+	faveButton.setAttribute('onClick', 'favorite()');
+	i.className = 'fa fa-heart';
+	favorite = () => {
+		faveButton.classList.toggle('favorited');
+		let id = restaurant.id;
+		if (faveButton.className === 'button favorite-button favorited') {
+			let truthy = true;
+			return DBHelper.isFavorite(truthy, id);
+		}
+		else {
+			let truthy = false;
+			return DBHelper.isFavorite(truthy, id);
+		}
+	};
+	restContainer.append(faveButton);
+	faveButton.append(i);
 
 
 	const cuisine = document.getElementById('restaurant-cuisine');
@@ -95,6 +115,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	// fill reviews without closing transaction
 	DBHelper.fetchReviews(restaurant.id, fillReviewsHTML);
 };
+
 
 /**
 	* Create restaurant operating hours HTML table and add it to the webpage.
