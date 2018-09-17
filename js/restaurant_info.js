@@ -75,6 +75,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	image.className = 'restaurant-img';
 	image.src = DBHelper.imageUrlForRestaurant(restaurant) + '_large.jpg';
 	image.alt = `Picture of ${restaurant.name} restaurant`;
+	//create fave button
 	const faveButton = document.createElement('button');
 	const i = document.createElement('i');
 	getClass = () => {
@@ -101,7 +102,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 			return DBHelper.setFavorite(truthy, id);
 		}
 	};
-	restContainer.append(faveButton);
+	name.append(faveButton);
 	faveButton.append(i);
 
 
