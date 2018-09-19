@@ -6,7 +6,6 @@ var newMap;
 document.addEventListener('DOMContentLoaded', (event) => {
 	initMap();
 });
-
 /**
 	* Initialize Leaflet map, called from HTML.added window to init
 	*/
@@ -63,8 +62,6 @@ fetchRestaurantFromURL = (callback) => {
 	*set alt tags for images.
 	*/
 fillRestaurantHTML = (restaurant = self.restaurant) => {
-	//create fave button
-	const restContainer = document.getElementById('restaurant-container');
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
 
@@ -75,15 +72,33 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	image.className = 'restaurant-img';
 	image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg', '') + '_large.jpg';
 	image.alt = `Picture of ${restaurant.name} restaurant`;
-	//create fave button
 	const faveButton = document.createElement('button');
-
 	const i = document.createElement('i');
+	//get current class of button so current favorited status will show, update IndexedDB if returning from being offline.
 	getClass = () => {
-		if(restaurant.is_favorite == 'true') {
+		if(PerformanceEntry) {
+			let pageNav = performance.getEntriesByType('navigation')[0];
+			let isReloaded = pageNav.type;
+			if(isReloaded == 'reload') {
+				//get local storage key & value, and place in IDB when user comes back online.
+				for(var i=0, len=localStorage.length; i<len; i++) {
+					var key = localStorage.key(i);
+					var value = localStorage[key];
+					DBHelper.setFavorite(value, key);
+				}
+			}
+		}
+		let stringID = JSON.stringify(restaurant.id);
+		let response = localStorage.getItem(stringID, 'true');
+		if(response == 'true') {
+			let id = restaurant.id;
+			let truthy = true;
+			faveButton.setAttribute('aria-label', 'add to favorites');
+			DBHelper.localStorageFavorite(truthy, id);
 			return 'button favorite-button favorited';
 		}
 		else {
+			faveButton.setAttribute('aria-label', 'remove from favorites');
 			return 'button favorite-button';
 		}
 	};
@@ -91,25 +106,28 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	faveButton.setAttribute('tabindex', '0');
 	faveButton.setAttribute('onClick', 'favorite()');
 	i.className = 'fa fa-heart';
+	//function for button onclick
 	favorite = () => {
+		//toggles the class of the button
 		faveButton.classList.toggle('favorited');
 		let id = restaurant.id;
+		//restaurant.is_favorite string comparison doesnt work here
 		if (faveButton.className === 'button favorite-button favorited') {
 			let truthy = true;
-			return DBHelper.setFavorite(truthy, id);
+			console.log('truthy', truthy);
+			DBHelper.localStorageFavorite(truthy, id);
+			DBHelper.setFavorite(truthy, id);
 		}
 		else {
 			let truthy = false;
-			return DBHelper.setFavorite(truthy, id);
+			DBHelper.localStorageFavorite(truthy, id);
+			DBHelper.setFavorite(truthy, id);
 		}
 	};
 	name.append(faveButton);
 	faveButton.append(i);
-
-
 	const cuisine = document.getElementById('restaurant-cuisine');
 	cuisine.innerHTML = restaurant.cuisine_type;
-
 	// fill operating hours
 	if (restaurant.operating_hours) {
 		fillRestaurantHoursHTML();
@@ -117,8 +135,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	// fill reviews without closing transaction
 	DBHelper.fetchReviews(restaurant.id, fillReviewsHTML);
 };
-
-
 /**
 	* Create restaurant operating hours HTML table and add it to the webpage.
 	*/
