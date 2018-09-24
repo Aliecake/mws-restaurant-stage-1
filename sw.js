@@ -83,7 +83,7 @@ self.addEventListener('fetch', (event) => {
 		caches.match(request, {ignoreSearch: true}).then((response) => {
 			if (response) {
 				//return cached files
-				console.log('[ServiceWorker] found in cache', event.request);
+				//console.log('[ServiceWorker] found in cache', event.request);
 				return response;
 			}
 			//clone request
