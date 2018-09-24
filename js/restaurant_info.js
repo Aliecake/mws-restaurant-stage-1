@@ -234,11 +234,15 @@ createReviewHTML = (review) => {
 
 
 submitReview = () => {
-	const name = document.getElementById('name-form');
-	const date = document.getElementById('date-form');
-	const review = document.getElementById('rating-form');
-	console.log(name, date, review);
-}
+	const name = document.getElementById('name-form').value;
+	const date = document.getElementById('date-form').value;
+	const test = document.getElementsByClassName('rating-form').value;
+	console.log(test);
+	//below returns undefined....
+	const rating = document.getElementsByName('rating-input').value;
+	const review = document.getElementsByClassName('input-review').value;
+	console.log(name, date, rating, review);
+};
 
 /**
 	* Add restaurant name to the breadcrumb navigation menu
