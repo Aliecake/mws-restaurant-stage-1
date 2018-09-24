@@ -1,9 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-/*TODO: */
-
-/*DONE: skipcontent to reviews, media queries for mobile, tablet, desktop, move this after, responsive images*/
-
+/*TODO: add classes for review form */
 /* reset webkits*/
 * {
 	margin: 0;
@@ -132,6 +129,9 @@ section {
 	letter-spacing: 1px;
 	text-align: center;
 	text-transform: uppercase;
+}
+.starred {
+	color: rgba(255, 200, 0);
 }
 /* ====================== Navigation ====================== */
 nav {
@@ -349,16 +349,42 @@ nav h2 a {
 
 .rating {
 	font-weight: 900;
-	background-color: orange;
+	background-color: rgb(151, 151, 151);
 	border-radius: 0px 15px 15px 0px;
 	max-width: 50%;
 	padding-left: 7px;
 }
-
+/*Form Stars Input - source https://css-tricks.com/star-ratings/ */
+.stars {
+	unicode-bidi: bidi-override;
+	direction: rtl;
+}
+.stars input[type=radio] {
+	display: none;
+}
+.stars > label {
+	position: relative;
+	display: inline-block;
+}
+.stars > input:checked ~ label {
+	color: rgb(255, 225, 0);
+}
+.stars > label:hover:before,
+.stars > label:hover ~ label:before {
+	content: "\2605";
+	position: absolute;
+	color: rgb(255, 225, 0);
+}
 .comments {
 	padding-left: 7px;
 }
-
+/*Review Form*/
+.ul .review-form {
+	width: auto;
+}
+.review-form .input-review {
+	min-width: 100%;
+}
 @media screen and (max-width: 650px) {
 	h1,
 	h2 {
