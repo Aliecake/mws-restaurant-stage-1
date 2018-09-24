@@ -3,7 +3,6 @@
  * Common database helper functions.
  */
 
-// Change this to your server port
 class DBHelper {
 	//create and open a Database
 	static openDB() {
@@ -11,7 +10,7 @@ class DBHelper {
 		if (!navigator.serviceWorker) {
 			return Promise.resolve();
 		}
-		return idb.open('restIDB', 1, (upgradeDb) => {
+		return idb.open('restIDB', 3, (upgradeDb) => {
 			switch(upgradeDb.oldVersion) {
 			case 0:
 				upgradeDb.createObjectStore('restaurants', {keyPath: 'id'}); //autoincrement will add duplicates to DB on put
@@ -27,10 +26,12 @@ class DBHelper {
 	 */
 
 	static get DATABASE_URL() {
+		// Change this to your server port
 		const port = 1337;
 		return `http://localhost:${port}/restaurants`;
 	}
 	static get REVIEW_URL() {
+		// Change this to your server port
 		const port = 1337;
 		//to store only each restaurant id when visited, instead of trying to store full db on first load
 		let windowPath = window.location.href;
@@ -161,6 +162,7 @@ class DBHelper {
 			}
 		});
 	}
+	//called by fillrestaurantsHTML
 	static fetchReviews() {
 		let dbPromise = DBHelper.openDB();
 		dbPromise.then(db => {
@@ -176,12 +178,16 @@ class DBHelper {
 	}
 
 	//store favorite value in idb, takes values from fillrestaurantshtml onclick
-	static isFavorite(truthy, id) {
-		const faveURL = `http://localhost:1337/restaurants/${id}/?is_favorite=${truthy}`;
+	static setFavorite(truthy, id) {
+		let faveURL = `http://localhost:1337/restaurants/${id}/?is_favorite=${truthy}`;
+		console.log(faveURL);
 		fetch(faveURL, {method: 'PUT'}).then(response => {
 			console.log(response);
 			//open favorites and change to true/false based
 		});
+	}
+	static localStorageFavorite(truthy, id) {
+		return localStorage.setItem(id, truthy);
 	}
 	/**
 	 * Restaurant page URL.
