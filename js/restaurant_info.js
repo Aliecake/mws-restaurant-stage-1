@@ -73,15 +73,19 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg', '') + '_large.jpg';
 	image.alt = `Picture of ${restaurant.name} restaurant`;
 	const faveButton = document.createElement('button');
+	faveButton.setAttribute('role', 'button');
+	faveButton.setAttribute('name', 'favorite button');
+	faveButton.setAttribute('aria-label', 'Add to Favorites');
 	const i = document.createElement('i');
-	//get current class of button so current favorited status will show, update IndexedDB if returning from being offline.
+	//get favorite status so current status will show
 	getClass = () => {
 		if(PerformanceEntry) {
 			let pageNav = performance.getEntriesByType('navigation')[0];
 			let isReloaded = pageNav.type;
+			//if page is reloaded, update IndexedDB appropiately.
 			if(isReloaded == 'reload') {
 				//get local storage key & value, and place in IDB when user comes back online.
-				for(var i=0, len=localStorage.length; i<len; i++) {
+				for(var i = 0, length = localStorage.length; i < length; i++) {
 					var key = localStorage.key(i);
 					var value = localStorage[key];
 					DBHelper.setFavorite(value, key);
@@ -93,12 +97,14 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		if(response == 'true') {
 			let id = restaurant.id;
 			let truthy = true;
-			faveButton.setAttribute('aria-label', 'add to favorites');
+			faveButton.setAttribute('aria-label', 'is a favorite');
+			faveButton.setAttribute('name', 'is a favorite');
 			DBHelper.localStorageFavorite(truthy, id);
 			return 'button favorite-button favorited';
 		}
 		else {
-			faveButton.setAttribute('aria-label', 'remove from favorites');
+			faveButton.setAttribute('aria-label', 'is not a favorite');
+			faveButton.setAttribute('name', 'is not a favorite');
 			return 'button favorite-button';
 		}
 	};
@@ -113,6 +119,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		let id = restaurant.id;
 		//restaurant.is_favorite string comparison doesnt work here
 		if (faveButton.className === 'button favorite-button favorited') {
+			faveButton.setAttribute('name', 'is a favorite');
 			let truthy = true;
 			console.log('truthy', truthy);
 			DBHelper.localStorageFavorite(truthy, id);
@@ -120,6 +127,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		}
 		else {
 			let truthy = false;
+			faveButton.setAttribute('name', 'is not a favorite');
 			DBHelper.localStorageFavorite(truthy, id);
 			DBHelper.setFavorite(truthy, id);
 		}
@@ -163,6 +171,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 	const container = document.getElementById('reviews-container');
 	const title = document.createElement('h2');
+	//add href to skip to add review
 	title.innerHTML = 'Reviews';
 	container.appendChild(title);
 
@@ -199,9 +208,22 @@ createReviewHTML = (review) => {
 
 	const rating = document.createElement('p');
 	rating.className = 'rating';
-	rating.innerHTML = `Rating: ${review.rating}`;
+	rating.innerHTML = 'Rating: ';
 	li.appendChild(rating);
-
+	//show stars instead of rating number
+	let count = 1;
+	for (let i = 0; i < 5; i++) {
+		if(`${review.rating}`>= count){
+			const iconGold = document.createElement('i');
+			iconGold.className = 'fa fa-star starred';
+			rating.append(iconGold);
+		} else {
+			const iconBlack = document.createElement('i');
+			iconBlack.className = 'fa fa-star';
+			rating.append(iconBlack);
+		}
+		count++;
+	}
 	const comments = document.createElement('p');
 	comments.className = 'comments';
 	comments.innerHTML = review.comments;
@@ -209,6 +231,14 @@ createReviewHTML = (review) => {
 
 	return li;
 };
+
+
+submitReview = () => {
+	const name = document.getElementById('name-form');
+	const date = document.getElementById('date-form');
+	const review = document.getElementById('rating-form');
+	console.log(name, date, review);
+}
 
 /**
 	* Add restaurant name to the breadcrumb navigation menu
