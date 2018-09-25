@@ -15,8 +15,9 @@ Maintains responsiveness & accessibility
 
 ###Stage 3 changes
 Place reviews from new endpoint in rest server into IndexedDB
-Fetch reviews changed
-Epoch changed to date/time
+Reviews and favorites now save in local storage and will get pushed to IndexedDB when user goes back online.
+Maintained accessiblity standards and responsiveness.
+
 
 
 ## Project Overview: Stage 1
