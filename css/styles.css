@@ -25,7 +25,7 @@ body {
 	margin-right: auto;
 }
 
-ul,
+#restaurant-list ul,
 li {
 	font-family: Arial, Helvetica, sans-serif;
 	color: #000;
@@ -349,7 +349,7 @@ nav h2 a {
 
 .rating {
 	font-weight: 900;
-	background-color: rgb(151, 151, 151);
+	background-color: rgb(206, 206, 206);
 	border-radius: 0px 15px 15px 0px;
 	max-width: 50%;
 	padding-left: 7px;
@@ -379,8 +379,9 @@ nav h2 a {
 	padding-left: 7px;
 }
 /*Review Form*/
-.ul .review-form {
+.inside ul li{
 	width: auto;
+	display: block;
 }
 .review-form .input-review {
 	min-width: 100%;

@@ -176,18 +176,65 @@ class DBHelper {
 				fillReviewsHTML(response);
 			});
 	}
-
 	//store favorite value in idb, takes values from fillrestaurantshtml onclick
 	static setFavorite(truthy, id) {
 		let faveURL = `http://localhost:1337/restaurants/${id}/?is_favorite=${truthy}`;
-		console.log(faveURL);
+		//console.log(faveURL);
 		fetch(faveURL, {method: 'PUT'}).then(response => {
-			console.log(response);
+			console.log('Successfully added favorite', response);
 			//open favorites and change to true/false based
 		});
 	}
+
 	static localStorageFavorite(truthy, id) {
 		return localStorage.setItem(id, truthy);
+	}
+
+	static saveReview(id, name, myEpoch, review, rating) {
+		const postReview = 'http://localhost:1337/reviews/';
+		const reviewParameters = {
+			restaurant_id: id,
+			name: name,
+			createdAt: myEpoch,
+			updatedAt: myEpoch,
+			rating: rating,
+			comments: review,
+		};
+		//Source from kats walkthrough https://www.youtube.com/watch?time_continue=2&v=uyvIybSjCcw
+		const stringReview = {
+			body: JSON.stringify(reviewParameters),
+			method: 'POST'
+		};
+
+		fetch(postReview, stringReview).then(response => response.json())
+			.catch(error => console.log('Add review failed', error));
+	}
+	static deleteKeys() {
+		let arr = [];
+		for (var i = 0; i < localStorage.length; i++){
+			//if key begins with letter, put into array
+			if (localStorage.key(i).substring(0,1) == 'r') {
+				arr.push(localStorage.key(i));
+			}
+		}
+		// iterate through array, remove reviews in local storage after they have been added to IDB
+		for (var j = 0; j < arr.length; j++) {
+			localStorage.removeItem(arr[j]);
+		}
+	}
+
+	static reviewLocalStorage(id, name, myEpoch, review, rating) {
+		const reviewParameters = {
+			restaurant_id: id,
+			name: name,
+			createdAt: myEpoch,
+			updatedAt: myEpoch,
+			rating: rating,
+			comments: review,
+		};
+		const stringReview = JSON.stringify(reviewParameters);
+		localStorage.setItem('review', stringReview);
+		alert('Review stored while offline');
 	}
 	/**
 	 * Restaurant page URL.

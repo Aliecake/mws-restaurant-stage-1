@@ -94,7 +94,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		}
 		let stringID = JSON.stringify(restaurant.id);
 		let response = localStorage.getItem(stringID, 'true');
-		if(response == 'true') {
+		if(response == 'true' || restaurant.is_favorite == 'true') {
 			let id = restaurant.id;
 			let truthy = true;
 			faveButton.setAttribute('aria-label', 'is a favorite');
@@ -121,7 +121,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		if (faveButton.className === 'button favorite-button favorited') {
 			faveButton.setAttribute('name', 'is a favorite');
 			let truthy = true;
-			console.log('truthy', truthy);
 			DBHelper.localStorageFavorite(truthy, id);
 			DBHelper.setFavorite(truthy, id);
 		}
@@ -174,7 +173,30 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 	//add href to skip to add review
 	title.innerHTML = 'Reviews';
 	container.appendChild(title);
+	if(PerformanceEntry) {
+		let pageNav = performance.getEntriesByType('navigation')[0];
+		let isReloaded = pageNav.type;
+		//if page is reloaded, update IndexedDB appropiately.
+		if(isReloaded == 'reload') {
+			//get local storage key & value, and place in IDB when user comes back online.
+			for(var i = 0, length = localStorage.length; i < length; i++) {
+				const key = localStorage.key(i);
+				const offlineValue = JSON.parse(localStorage[key]);
+				//take the value and create variables
+				const review = offlineValue.comments;
+				const id = offlineValue.restaurant_id;
+				const name = offlineValue.name;
+				const myEpoch = offlineValue.updatedAt;
+				const rating = offlineValue.rating;
 
+				DBHelper.saveReview(id, name, myEpoch, review, rating);
+				setTimeout(function(){
+					console.log('Deleting Keys');
+					DBHelper.deleteKeys();
+				}, 9000);
+			}
+		}
+	}
 	if (!reviews) {
 		const noReviews = document.createElement('p');
 		noReviews.innerHTML = 'No reviews yet!';
@@ -232,14 +254,34 @@ createReviewHTML = (review) => {
 	return li;
 };
 
-
-submitReview = () => {
+submitReview = (restaurant = self.restaurant) => {
+	const id = restaurant.id;
 	const name = document.getElementById('name-form').value;
 	const date = document.getElementById('date-form').value;
 	const review = document.getElementById('review-input').value;
 	const rating = document.querySelector('input[name=rating-input]:checked').value;
+	var myDate = new Date(date);
+	var myEpoch = myDate.getTime()/1;
 
-	console.log(name, date, rating, review);
+	if(navigator.onLine) {
+		//post review to IDB
+		DBHelper.saveReview(id, name, myEpoch, review, rating, (error) => {
+			console.log('review submitted');
+			if (error) {
+				console.log('review not saved with', error);
+			}
+		});
+	}
+	else {
+		console.log('OFFLINE');
+		//if offline post to local storage
+		DBHelper.reviewLocalStorage(id, name, myEpoch, review, rating, (error) => {
+			console.log('review submitted offline');
+			if (error) {
+				console.log('review not saved offline with', error);
+			}
+		});
+	}
 };
 
 /**
