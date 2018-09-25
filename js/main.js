@@ -151,6 +151,7 @@ createRestaurantHTML = (restaurant) => {
 	faveButton.setAttribute('role', 'button');
 	const i = document.createElement('i');
 	getClass = () => {
+		//create class for favorite icon.
 		if(restaurant.is_favorite == 'true' || restaurant.is_favorite === true) {
 			faveButton.setAttribute('aria-label', 'Is a favorite');
 			return 'button favorite-button favorited';
