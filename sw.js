@@ -46,9 +46,9 @@ self.addEventListener('install', (event) => {
 			//opened and use cache.addAll to add files
 			return cache.addAll(cacheFiles);
 		}).then((skip) => {
-			console.log('Service Worker Skip waiting');
+			//console.log('Service Worker Skip waiting');
 			self.skipWaiting();
-			console.log('Service Worker properly installed');
+			//console.log('Service Worker properly installed');
 			return skip;
 		}).catch((error) => {
 			// install failed
@@ -65,7 +65,7 @@ self.addEventListener('activate', (event) => {
 			return Promise.all(projectCaches.map((cache) => {
 				//if cache versions to not match, delete old version
 				if (cache !== projectCache) {
-					console.log('Service Worker Removing Cache version');
+					//console.log('Service Worker Removing Cache version');
 					return caches.delete(cache);
 				}
 			}));
