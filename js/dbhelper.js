@@ -210,16 +210,17 @@ class DBHelper {
 			.catch(error => console.log('Add review failed', error));
 	}
 	static deleteKeys() {
-		let arr = [];
+		//source https://stackoverflow.com/questions/24551578/clear-localstorage-values-with-certain-prefix
+		let store = [];
 		for (var i = 0; i < localStorage.length; i++){
 			//if key begins with letter, put into array
 			if (localStorage.key(i).substring(0,1) == 'r') {
-				arr.push(localStorage.key(i));
+				store.push(localStorage.key(i));
 			}
 		}
 		// iterate through array, remove reviews in local storage after they have been added to IDB
 		for (var j = 0; j < arr.length; j++) {
-			localStorage.removeItem(arr[j]);
+			localStorage.removeItem(store[j]);
 		}
 	}
 
