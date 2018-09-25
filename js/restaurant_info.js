@@ -190,6 +190,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 				const rating = offlineValue.rating;
 
 				DBHelper.saveReview(id, name, myEpoch, review, rating);
+				//keys get deleted after they have been used
 				setTimeout(function(){
 					console.log('Deleting Keys');
 					DBHelper.deleteKeys();
