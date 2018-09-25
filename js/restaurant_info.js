@@ -236,15 +236,9 @@ createReviewHTML = (review) => {
 submitReview = () => {
 	const name = document.getElementById('name-form').value;
 	const date = document.getElementById('date-form').value;
-	const test = document.getElementsByClassName('rating-form');
-	var elements = document.getElementsByClassName('rating-form');
-	var value = elements[0].value;
-	
-	//only returns 5
-	console.log('i am the value', value);
-	//below returns undefined....
-	const rating = document.getElementsByName('rating-input').value;
-	const review = document.getElementsByClassName('input-review').value;
+	const review = document.getElementById('review-input').value;
+	const rating = document.querySelector('input[name=rating-input]:checked').value;
+
 	console.log(name, date, rating, review);
 };
 
