@@ -62,6 +62,7 @@ fetchRestaurantFromURL = (callback) => {
 	*set alt tags for images.
 	*/
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+	let id = restaurant.id;
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
 
@@ -86,8 +87,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 			if(isReloaded == 'reload') {
 				//get local storage key & value, and place in IDB when user comes back online.
 				for(var i = 0, length = localStorage.length; i < length; i++) {
-					var key = localStorage.key(i);
-					var value = localStorage[key];
+					const key = localStorage.key(i);
+					const value = localStorage[key];
 					DBHelper.setFavorite(value, key);
 				}
 			}
@@ -95,7 +96,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		let stringID = JSON.stringify(restaurant.id);
 		let response = localStorage.getItem(stringID, 'true');
 		if(response == 'true' || restaurant.is_favorite == 'true') {
-			let id = restaurant.id;
 			let truthy = true;
 			faveButton.setAttribute('aria-label', 'is a favorite');
 			faveButton.setAttribute('name', 'is a favorite');
@@ -113,10 +113,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	faveButton.setAttribute('onClick', 'favorite()');
 	i.className = 'fa fa-heart';
 	//function for button onclick
+
 	favorite = () => {
 		//toggles the class of the button
 		faveButton.classList.toggle('favorited');
-		let id = restaurant.id;
 		//restaurant.is_favorite string comparison doesnt work here
 		if (faveButton.className === 'button favorite-button favorited') {
 			faveButton.setAttribute('name', 'is a favorite');
@@ -140,7 +140,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		fillRestaurantHoursHTML();
 	}
 	// fill reviews without closing transaction
-	DBHelper.fetchReviews(restaurant.id, fillReviewsHTML);
+	DBHelper.fetchReviews(id, fillReviewsHTML);
 };
 /**
 	* Create restaurant operating hours HTML table and add it to the webpage.
@@ -182,6 +182,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 			for(var i = 0, length = localStorage.length; i < length; i++) {
 				const key = localStorage.key(i);
 				const offlineValue = JSON.parse(localStorage[key]);
+
 				//take the value and create variables
 				const review = offlineValue.comments;
 				const id = offlineValue.restaurant_id;
@@ -261,8 +262,8 @@ submitReview = (restaurant = self.restaurant) => {
 	const date = document.getElementById('date-form').value;
 	const review = document.getElementById('review-input').value;
 	const rating = document.querySelector('input[name=rating-input]:checked').value;
-	var myDate = new Date(date);
-	var myEpoch = myDate.getTime()/1;
+	const myDate = new Date(date);
+	const myEpoch = myDate.getTime()/1;
 
 	if(navigator.onLine) {
 		//post review to IDB
