@@ -163,7 +163,7 @@ class DBHelper {
 		});
 	}
 	//called by fillrestaurantsHTML
-	static fetchReviews() {
+	static fetchReviews(id) {
 		let dbPromise = DBHelper.openDB();
 		dbPromise.then(db => {
 			//opens DB and gets reviews for restaurants visited.
@@ -172,8 +172,11 @@ class DBHelper {
 			return store.getAll();
 		})
 			.then(response => {
+				//turn JSON objects into Array, then filter by restaurant_id to post proper reviews.
+				let jsonToArray = Object.keys(response).map((k) => response[k]);
+				let reviews = jsonToArray.filter(r => r.restaurant_id == id);
 				//calls restaurant_info.js fillreviews so transaction stays open. Returning response ends async request.
-				fillReviewsHTML(response);
+				fillReviewsHTML(reviews);
 			});
 	}
 	//store favorite value in idb, takes values from fillrestaurantshtml onclick
@@ -190,6 +193,20 @@ class DBHelper {
 		return localStorage.setItem(id, truthy);
 	}
 
+	//autoincrement count, could be used to update reviews.
+	/*	let dbPromise = DBHelper.openDB();
+		dbPromise.then(db => {
+			//opens DB and gets reviews for restaurants visited.
+			var tx = db.transaction('reviews', 'readonly');
+			//let keys = [];
+			var store = tx.objectStore('reviews');
+			return store.count();
+		}).then(request => {
+			console.log('request', request);
+			let keyToID = ++request;
+					});
+			*/
+
 	static saveReview(id, name, myEpoch, review, rating) {
 		const postReview = 'http://localhost:1337/reviews/';
 		const reviewParameters = {
@@ -200,7 +217,7 @@ class DBHelper {
 			rating: rating,
 			comments: review,
 		};
-		//Source from kats walkthrough https://www.youtube.com/watch?time_continue=2&v=uyvIybSjCcw
+			//Source from kats walkthrough https://www.youtube.com/watch?time_continue=2&v=uyvIybSjCcw
 		const stringReview = {
 			body: JSON.stringify(reviewParameters),
 			method: 'POST'
@@ -219,7 +236,7 @@ class DBHelper {
 			}
 		}
 		// iterate through array, remove reviews in local storage after they have been added to IDB
-		for (var j = 0; j < arr.length; j++) {
+		for (var j = 0; j < store.length; j++) {
 			localStorage.removeItem(store[j]);
 		}
 	}
