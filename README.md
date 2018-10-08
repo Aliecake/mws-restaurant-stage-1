@@ -3,11 +3,11 @@
 #### _Three Stage Course Material Project - Restaurant Reviews_
 ---
 ## Table of Contents
-[Installation](#Installation)
+[Installation](#installation)
 
-[Instructions](#Instructions)
+[Instructions](#instructions)
 
-[Udacity Project Overview](#Project-Overview)
+[Udacity Project Overview](#project-overview)
 
 ---
 ## Installation
