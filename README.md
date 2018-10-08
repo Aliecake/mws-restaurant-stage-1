@@ -1,42 +1,36 @@
 # Mobile Web Specialist Certification Course
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
+---
+## Table of Contents
+[Installation](#Installation)
+[Instructions](#Instructions)
+[Udacity Project Overview](#Project-Overview)
+---
+##Installation
+For this stage(3) you will need to have [MWS Stage 3 REST](https://github.com/Aliecake/mws-restaurant-stage-3.git). Follow instructions there to start the sails app.
 
-###Stage 1 changes
-Stage one of project I took a non responsive, non accessible web app and changed it to a mobile ready and accessible. Service worker was added to allow for an offline experience.
+*Start a simple HTTP server 
+You can use [VSCode Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or [Atom's live server](https://atom.io/packages/atom-live-server)
+Else, with Python 3, open directory in terminal and input ```py -m http.server 8000```  With Python 2  ```python -m SimpleHTTPServer 8000```
+If you don't have Python installed, navigate to Python's [website](https://www.python.org/) to download and install the software.
 
-###Stage 2 Changes
+*Once your simple server is running, visit [http://localhost:8000](http://localhost:8000)
 
-Optimized images for faster loading
-Switched XHR requests to Fetch API and now pulls data from dev server
-Added Manifest
-Any data previously accessed is still available offline
-Maintains responsiveness & accessibility
+##Instructions
+Open the index.html file, you can now navigate the site.
 
-###Stage 3 changes
-Place reviews from new endpoint in rest server into IndexedDB
-Reviews and favorites now save in local storage and will get pushed to IndexedDB when user goes back online.
-Maintained accessiblity standards and responsiveness.
+## Project-Overview
 
-
-
-## Project Overview: Stage 1
-
-For the **Restaurant Reviews** projects, you will incrementally convert a static webpage to a mobile-ready web application. In **Stage One**, you will take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. You will also add a service worker to begin the process of creating a seamless offline experience for your users.
+For the **Restaurant Reviews** projects, you will incrementally convert a static webpage to a mobile-ready web application. In **Stage One**, you will take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. You will also add a service worker to begin the process of creating a seamless offline experience for your users. In **Stage Two** restaurant data will be pulled from a new RESTful server. You will use IndexedDB to store and retrieve restaurants and maintain stage 1 standards. In **Stage Three** you will implement new features, including favorites & forms while maintaining first two stages rubrics.
 
 ### Specification
 
 You have been provided the code for a restaurant reviews website. The code has a lot of issues. It’s barely usable on a desktop browser, much less a mobile device. It also doesn’t include any standard accessibility features, and it doesn’t work offline at all. Your job is to update the code to resolve these issues while still maintaining the included functionality. 
 
 ### What do I do from here?
-
-1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
-
-In a terminal, check the version of Python you have: `python -V`. If you have Python 2.x, spin up the server with `python -m SimpleHTTPServer 8000` (or some other port, if port 8000 is already in use.) For Python 3.x, you can use `python3 -m http.server 8000`. If you don't have Python installed, navigate to Python's [website](https://www.python.org/) to download and install the software.
-
-2. With your server running, visit the site: `http://localhost:8000`, and look around for a bit to see what the current experience looks like.
-3. Explore the provided code, and make start making a plan to implement the required features in three areas: responsive design, accessibility and offline use.
-4. Write code to implement the updates to get this site on its way to being a mobile-ready website.
+1. Explore the provided code, and make start making a plan to implement the required features in three areas: responsive design, accessibility and offline use.
+2. Write code to implement the updates to get this site on its way to being a mobile-ready website.
 
 ### Note about ES6
 
